@@ -19,8 +19,9 @@ const MidiToNotes = (function () {
     adjustForTempoChanges(sortedMidiEvents);
     collectPitchBendEvents(sortedMidiEvents);
 
-    // Calculate Tempo if available
+    // Calculate Tempo, if available, and Note Spacing.
     Inputs.inputs["bpm"].placeholder = MidiToNotes.calculatedBPM || "";
+    Inputs.calculateNoteSpacing();
 
     // Calculate endpoint
     for (let i = sortedMidiEvents.length - 1; i >= 0; i--) {

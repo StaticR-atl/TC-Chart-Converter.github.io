@@ -22,7 +22,10 @@ const Inputs = (function () {
   };
 
   /** Inputs that are not required to be filled in */
-  const optionalInputNames = new Set(["songendpoint"]);
+  const optionalInputNames = new Set([
+    "notespacing",
+    "songendpoint",
+  ]);
 
   /** Inputs that need to be formatted as ints */
   const intInputNames = new Set([
@@ -32,6 +35,7 @@ const Inputs = (function () {
     "songendpoint",
     "beatsperbar",
   ]);
+
   /** Inputs that need to be formatted as floats */
   const floatInputNames = new Set([
     "bpm",
@@ -114,13 +118,24 @@ const Inputs = (function () {
     return num;
   }
 
+  function calculateNoteSpacing() {
+    let activeBPM = Inputs.inputs["bpm"].value || MidiToNotes.calculatedBPM;
+    Inputs.calculatedSpacing = Math.ceil(100 / activeBPM * 300);
+    Inputs.inputs["notespacing"].placeholder = Inputs.calculatedSpacing || "Auto";
+  }
+
   Init.register(function () {
     for (const inputName of Object.keys(inputMap)) {
       const input = document.getElementById(inputName);
       if (!input) throw `Could not find input: ${inputName}`;
       inputs[inputName] = input;
     }
+
+    // Automatically calculate default Spacing whenever the BPM changes.
+    document
+      .getElementById("bpm")
+      .addEventListener("change", calculateNoteSpacing);
   });
 
-  return { inputs, readColors, readInputs, verifyInputs, writeInputs };
+  return { inputs, readColors, readInputs, verifyInputs, writeInputs, calculateNoteSpacing };
 })();

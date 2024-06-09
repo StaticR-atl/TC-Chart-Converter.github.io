@@ -8,7 +8,7 @@ const Generate = (function () {
     if (!Inputs.verifyInputs() || MidiToNotes.notes.length === 0) {
       alert(
         "Please ensure a valid midi is uploaded and all fields are filled\n" +
-          "(Song Endpoint can be empty)"
+          "(Song Endpoint and Note Spacing can be empty)"
       );
       return;
     }
@@ -18,6 +18,7 @@ const Generate = (function () {
     const chart = {
       ...inputs,
       tempo: inputs.tempo || MidiToNotes.calculatedBPM,
+      savednotespacing: inputs.savednotespacing || Inputs.calculatedSpacing,
       notes: MidiToNotes.notes,
       lyrics: MidiToNotes.lyrics,
       trackRef: (inputs.prefixTrackRef ? Math.random().toString().substring(2) + '_' : '') + inputs.trackRef,
